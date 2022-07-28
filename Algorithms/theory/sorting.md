@@ -75,3 +75,91 @@ def insertion_sort(data):
 - 반복문이 두 개이므로 O(n^2) 의 시간 복잡도를 갖는다.
 - 최악의 경우: n * (n - 1) / 2
 - 완전 정렬이 되어 있는 경우: O (n)
+
+# Merge Sort (합병 정렬) 란?
+
+**Merge Sort (합병 정렬)** 란: 반복적으로 각 서브리스트의 구성 원소가 한개가 될 때까지 한 리스트를 쪼갠 후에 서브리스트들을 정렬하며 하나의 리스트로 merge 하는 정렬 방법
+
+이것은 **Divide and Conquer** 원칙을 따르며 작동!!!
+
+### **Divide and Conquer 란?**
+
+> 큰 문제를 작은 문제 단위로 쪼개면서 해결해나가는 방식
+> 
+
+### ****Top-down Merge Sort 동작 방식****
+
+Top-down merge sort 는 기본적으로 **recursion mechanism** 를 사용하는 정렬 기법이다.
+
+1. 정렬되지 않은 리스트를 n 개의 서브리스트로 나눈다(divide). (이때 각 서브리스트를 구성하는 원소는 1개)
+2. n 개의 서브리스트를 새로 정렬된 서브리스트를 생성하며 합병(merge)한다. 오직 1개의 정렬된 서브리스트만 남을 때까지!!
+
+```cpp
+void merge(int *Arr, int start, int mid, int end) {
+	// 각 서브리스트를 합치기 위한 배열(temp) 생성
+	int temp[end - start + 1];
+
+	// 각 divide 되었다고 가정된 각각의 서브리스트의 시작 인덱스 설정
+	int i = start, j = mid+1, k = 0;
+
+	// divide 된 배열들의 원소들 중 더 작은 원소를 temp 배열에 추가
+	while(i <= mid && j <= end) {
+		if(Arr[i] <= Arr[j]) {
+			temp[k] = Arr[i];
+			k += 1; i += 1;
+		}
+		else {
+			temp[k] = Arr[j];
+			k += 1; j += 1;
+		}
+	}
+
+	// 왼쪽 배열의 모든 원소가 temp 배열에 추가가 안된 경우
+	while(i <= mid) {
+		temp[k] = Arr[i];
+		k += 1; i += 1;
+	}
+	
+	// 오른쪽 배열의 모든 원소가 temp 배열에 추가가 안된 경우
+	while(j <= end) {
+		temp[k] = Arr[j];
+		k += 1; j += 1;
+	}
+
+	// 정렬된 temp 배열을 기존 배열로 copy
+	for(i = start; i <= end; i += 1) {
+		Arr[i] = temp[i - start]
+	}
+}
+
+void mergeSort(int *Arr, int start, int end) {
+
+	if(start < end) {
+		int mid = (start + end) / 2;
+		mergeSort(Arr, start, mid);
+		mergeSort(Arr, mid+1, end);
+		merge(Arr, start, mid, end);
+	}
+```
+
+### 시간 복잡도
+
+| 평균 | 최선 | 최악 |
+| --- | --- | --- |
+| Θ(nlogn) | Ω(nlogn) | O(nlogn) |
+
+### 공간 복잡도
+
+| 평균 | 최선 | 최악 |
+| --- | --- | --- |
+| O(n) | O(n) | O(n) |
+
+### Merge Sort 장점
+
+- **Stable Sort(안정 정렬)** 에 속한다.
+- 기존 다른 정렬에 비해 **빠른 정렬**에 속한다.
+
+### Merge Sort 단점
+
+- 정렬을 하는 배열외의 추가적인 임시 배열 (**추가적인 메모리**)가 필요
+    - **In-place sort** 가 아니다. 즉, **Space complexity 가 높다**.
