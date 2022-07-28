@@ -20,6 +20,7 @@ def selection_sort(data):
 ### Selection sort 시간 복잡도
 
 - 선택 정렬은 반복문이 2개 이므로 시간 복잡도는 O(n^2) 이며, 실제로 상세히 계산하면 n * (n-1) / 2 이다.
+---
 
 # Bubble Sort (버블 정렬) 란?
 
@@ -75,7 +76,7 @@ def insertion_sort(data):
 - 반복문이 두 개이므로 O(n^2) 의 시간 복잡도를 갖는다.
 - 최악의 경우: n * (n - 1) / 2
 - 완전 정렬이 되어 있는 경우: O (n)
-
+---
 # Merge Sort (합병 정렬) 란?
 
 **Merge Sort (합병 정렬)** 란: 반복적으로 각 서브리스트의 구성 원소가 한개가 될 때까지 한 리스트를 쪼갠 후에 서브리스트들을 정렬하며 하나의 리스트로 merge 하는 정렬 방법
@@ -163,3 +164,91 @@ void mergeSort(int *Arr, int start, int end) {
 
 - 정렬을 하는 배열외의 추가적인 임시 배열 (**추가적인 메모리**)가 필요
     - **In-place sort** 가 아니다. 즉, **Space complexity 가 높다**.
+---
+
+# Quick Sort (퀵 정렬) 란?
+
+- **In-place sorting Algorithm** 으로 1962년 Hoare 의해 개발되었다.
+- 다음 2가지 동작을 반복적으로 수행하며 정렬
+    1. 한 리스트를 2개의 partition 으로 나눈다.
+    2. 각각의 partition 을 **재귀적으로(recursively)** 정렬한다.
+    
+    ⇒ 이러한 방식은 Merge Sort 와 비슷하다.
+    
+- But, partition 을 나누는 과정에서 차이가 있다.
+    - **Quick Sort**
+        - 모든 요소 중 pivot item 보다 작은 값을 가지는 요소는 왼쪽 (before)
+        - 모든 요소 중 pivot item 보다 큰 값을 가지는 요소는 오른쪽 (after)
+        - Pivot item 은 리스트 중 어느 요소라도 될 수 있다.
+            - 모든 요소 중 Pivot item 을 고르는 방법도 여러 가지 존재
+    - **Merge Sort**
+        - 모든 partition 을 구성하는 원소가 1개가 될 때까지 나눈다.
+
+### Quick Sort 동작 방식
+
+Pivot 원소는 리스트 내 어떠한 원소가 될 수 있지만 편의성을 위해 **가장 첫번째 원소를 pivot** 이라 가정
+
+![Untitled](../../img/quicksort.jpeg)
+
+1. 배열 첫번째 원소를 **pivot** 이라 가정
+2. 피벗 앞에는 피벗보다 값이 작은 원소들이 오고, 피벗 뒤에는 피벗보다 값이 큰 원소들이 오도록 배열을 2개의 Partition 으로 나눈다. ⇒ **분할(Divide)**
+3. 분할된 2개의 partition 에 대해 재귀적으로 이 과정을 반복
+
+```cpp
+void quicksort(int low, int high) {
+		int pivot;
+
+		if (low < high) {
+				partition(low, high, pivot);
+				quicksort(low, pivot - 1);
+				quicksort(pivot + 1, high);
+		}
+}
+
+void partition(int low, int high, int &pivot) {
+		int pivotitem = S[low];    // S[] 전역 변수 가정
+		int j = low;
+		
+		for (int i = low + 1; i <= high; i++) {
+				if (S[i] < pivotitem) {
+						j++;
+						swap(S[i], S[j]);
+				}
+		}
+		pivot = j;
+		swap(S[low], S[pivot]);
+}
+```
+
+### 시간 복잡도
+
+| 평균 | 최선 | 최악 |
+| --- | --- | --- |
+| Θ(nlogn) | Ω(nlogn) | O(n^2) |
+- 왜 Quick Sort 의 Worst Case 가 O(n^2) 일까?
+    - Quick Sort 는 균등하게 Partition 을 나누는 Merge Sort 와 달리 비균등하게 Partition 이 나눠진다.
+- 왜 Quick Sort 는 비균등하게 나눠질까?
+    - Pivot 를 기준으로 2개의 partition 으로 나눠진다.
+    - Pivot 은 리스트의 어떤 원소도 될 수 있기에 어떤 원소를 pivot 으로 정하냐에 따라 나눠지는 partition이 달라질 수 있다.
+- 어떤 경우에 O(n^2) 이 걸릴까?
+    - 이미 정렬된 리스트의 경우 시간 복잡도가 O(n^2) 이다.
+
+### 공간 복잡도
+
+| 평균 | 최선 | 최악 |
+| --- | --- | --- |
+| O(logn) | O(logn) | O(n) |
+
+### Quick Sort 장점
+
+- 속도가 빠르다!
+- 추가적인 메모리를 필요로 하지 않는다. ⇒ in-place sort
+- 불필요한 데이터의 이동을 줄이고 먼 거리의 데이터를 교환한다. → 지역 locality 가 높아진다!!
+- 한 번 결정된 피벗들이 추후 연산에서 제외되는 특성으로 시간 복잡도가 O(nlogn) 을 가지는 다른 정렬 알고리즘과 비교할 때도 가장 빠르다.
+
+### Quick Sort 단점
+
+- 정렬된 리스트에 대해선 퀵 정렬의 비균등 분할에 의해 오히려 수행시간이 더 많이 걸린다.
+    - 이를 방지하기 위해 피벗을 선택할 때 중간값(medium)을 피벗을 선택하는 방법이 있다.
+- Stable 하지 않은 정렬이다.
+    - **Stable 하지 않다**: 같은 값에 대한 상대적인 순서를 보장하지 않는다.
