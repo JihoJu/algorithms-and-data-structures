@@ -1,25 +1,19 @@
 #include <iostream>
-#include <cmath>
 #include <algorithm>
 #include <string>
 #include <vector>
 
 using namespace std;
 
-bool cmp(const string a, const string b) {
-    int n;
-    
-    n = min(a.size(), b.size());
-    for (int i = 0; i < n; i++) {
-        if (a[i] - '0' == b[i] - '0')
-            continue;   
-        else
-            return (a[i] - '0') > (b[i] - '0');
-    }
-    
-    string num1 = a + b, num2 = b + a;
-    
-    return stoi(num1) > stoi(num2);
+bool cmp(const string &a, const string &b) {
+    /*
+        cmp 가 true 를 반환하면 원소의 순서를 그대로 놔두고
+        false 를 반환하면 원소를 swap 한다.
+        
+        a + b > b + a 가 true 라면 a, b 순서 그대로 두고
+        a + b < b + a 라면 false 로 a, b 순서를 swap 한다.
+    */
+    return stoi(a + b) > stoi(b + a);
 }
 
 string convertToString(vector<string> arr) {
