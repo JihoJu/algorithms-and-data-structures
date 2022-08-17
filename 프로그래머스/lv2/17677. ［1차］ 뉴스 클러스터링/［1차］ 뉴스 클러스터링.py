@@ -1,3 +1,4 @@
+""" set 의 메서드 사용 x 풀이
 def binary_search(target, S):
     left, right = 0, len(S) - 1
     
@@ -37,20 +38,28 @@ def solution(str1, str2):
     answer = int((intersection_cnt / (exc_inters_cnt + inters_union_cnt)) * 65536)
 
     return answer
+"""
 
+# set 메소드 사용 풀이
+def solution(str1, str2):
+    
+    A = [str1[i:i + 2].lower() for i in range(len(str1) - 1) if str1[i:i + 2].isalpha()]
+    B = [str2[i:i + 2].lower() for i in range(len(str2) - 1) if str2[i:i + 2].isalpha()]
+    
+    # 집합 A, B 모두 공집합인 경우
+    if len(A) == 0 and len(B) == 0:
+        return 65536
+    
+    # 교집합 구하기
+    set_intersection = set(A) & set(B)
+    # 교집합 개수 처리
+    inters_cnt = sum(min(A.count(elem), B.count(elem)) for elem in set_intersection)
+    
+    # 교집합을 제외한 합집합 개수
+    exclude_inters_union = len([elem for elem in A+B if elem not in set_intersection])
+    # 교집합만 고려한 합집합 처리 후 개수
+    include_inters_union = sum((max(A.count(elem), B.count(elem)) for elem in set_intersection))    
+    
+    answer = int((inters_cnt / (exclude_inters_union + include_inters_union)) * 65536)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return answer
