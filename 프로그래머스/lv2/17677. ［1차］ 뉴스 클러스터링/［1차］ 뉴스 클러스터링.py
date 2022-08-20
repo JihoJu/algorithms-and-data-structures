@@ -57,14 +57,14 @@ def solution(str1, str2):
     
     # 교집합 구하기
     set_intersection = set(A) & set(B)
+    # 합집합
+    set_union = set(A) | set(B)
+    
     # 교집합 개수 처리
     inters_cnt = sum(min(A.count(elem), B.count(elem)) for elem in set_intersection)
+    # 합집합 개수 처리
+    union_cnt = sum(max(A.count(elem), B.count(elem)) for elem in set_union)
     
-    # 교집합을 제외한 합집합 개수
-    exclude_inters_union = len([elem for elem in A+B if elem not in set_intersection])
-    # 교집합만 고려한 합집합 처리 후 개수
-    include_inters_union = sum((max(A.count(elem), B.count(elem)) for elem in set_intersection))    
-    
-    answer = int((inters_cnt / (exclude_inters_union + include_inters_union)) * 65536)
+    answer = int((inters_cnt / union_cnt) * 65536)
     
     return answer
