@@ -42,10 +42,15 @@ def solution(str1, str2):
 
 # set 메소드 사용 풀이
 def solution(str1, str2):
+
+    # zip 함수 사용
+    A = [(c1 + c2).lower() for c1, c2 in zip(str1, str1[1:]) if (c1 + c2).isalpha()]
+    B = [(c1 + c2).lower() for c1, c2 in zip(str2, str2[1:]) if (c1 + c2).isalpha()]
     
-    A = [str1[i:i + 2].lower() for i in range(len(str1) - 1) if str1[i:i + 2].isalpha()]
-    B = [str2[i:i + 2].lower() for i in range(len(str2) - 1) if str2[i:i + 2].isalpha()]
-    
+    # string index 연산
+    # A = [str1[i:i + 2].lower() for i in range(len(str1) - 1) if str1[i:i + 2].isalpha()]
+    # B = [str2[i:i + 2].lower() for i in range(len(str2) - 1) if str2[i:i + 2].isalpha()]
+
     # 집합 A, B 모두 공집합인 경우
     if len(A) == 0 and len(B) == 0:
         return 65536
@@ -61,5 +66,5 @@ def solution(str1, str2):
     include_inters_union = sum((max(A.count(elem), B.count(elem)) for elem in set_intersection))    
     
     answer = int((inters_cnt / (exclude_inters_union + include_inters_union)) * 65536)
-
+    
     return answer
