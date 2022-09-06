@@ -7,10 +7,10 @@ def dfs(u):
     
     visited[u] = 1
     cnt += 1
-    for i, v in enumerate(M[u]):
-        if i != 0 and v == 1 and not visited[i]:
-            dfs(i)
     
+    for i in range(1, len(M[u])):
+        if M[u][i] == 1 and not visited[i]:
+            dfs(i)
 
 def solution(n, wires):
     answer = float('inf')
@@ -23,19 +23,16 @@ def solution(n, wires):
         M[u][v] = 1
         M[v][u] = 1
     
+    cnt = 0
     for u, v in wires:
         visited = [0 for _ in range(n + 1)]
         visited[0] = 1
-        M[u][v] = 0
-        M[v][u] = 0
-        cnt = 0
+        M[u][v], M[v][u] = 0, 0
         dfs(u)
-        cnt1 = cnt
-        cnt = 0
-        dfs(v)
-        cnt2 = cnt
+        cnt1, cnt = cnt, 0
+        cnt2 = dfs(v)
+        cnt2, cnt = cnt, 0
         answer = min(abs(cnt1 - cnt2), answer)
-        M[u][v] = 1
-        M[v][u] = 1
+        M[u][v], M[v][u] = 1, 1
     
     return answer
