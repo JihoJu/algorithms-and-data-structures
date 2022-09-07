@@ -28,7 +28,10 @@ def check(r1, c1, r2, c2):
             return True
         else:
             return False
-
+        
+class LoopBreak(Exception):
+    pass
+        
 def solution(places):
     answer = []
 
@@ -42,33 +45,31 @@ def solution(places):
             (row, col) for row in range(5) for col in range(5) if place[row][col] == "P"
         ]
         result = 1  # 거리두기 결과
-        for x, y in pos:
-            visited = [[0 for _ in range(5)] for _ in range(5)]  # 방문 여부
-            dq = deque()
-            dq.append((x, y))  # P 위치 추가
-            visited[x][y] = 1
-            while len(dq) != 0:
-                px, py = dq.popleft()
-                for i in range(4):
-                    mx = px + dx[i]
-                    my = py + dy[i]
-                    if (
-                        0 <= mx < 5
-                        and 0 <= my < 5
-                        and visited[mx][my] == 0
-                        and get_distance(x, y, mx, my) <= 2
-                    ):
-                        if place[mx][my] == "P":
-                            if not check(x, y, mx, my):
-                                result = 0
-                                break
-                        visited[mx][my] = 1
-                        dq.append((mx, my))
-                # 거리두기가 안지켜졌을 경우
-                if result == 0:
-                    break
-            if result == 0:
-                break
+        try:
+            for x, y in pos:
+                visited = [[0 for _ in range(5)] for _ in range(5)]  # 방문 여부
+                dq = deque()
+                dq.append((x, y))  # P 위치 추가
+                visited[x][y] = 1
+                while len(dq) != 0:
+                    px, py = dq.popleft()
+                    for i in range(4):
+                        mx = px + dx[i]
+                        my = py + dy[i]
+                        if (
+                            0 <= mx < 5
+                            and 0 <= my < 5
+                            and visited[mx][my] == 0
+                            and get_distance(x, y, mx, my) <= 2
+                        ):
+                            if place[mx][my] == "P":
+                                if not check(x, y, mx, my):
+                                    result = 0
+                                    raise LoopBreak()
+                            visited[mx][my] = 1
+                            dq.append((mx, my))
+        except LoopBreak:
+            pass
         answer.append(result)
 
     return answer
