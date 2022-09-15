@@ -14,8 +14,7 @@ if N >= 3:
             cost[i][j] = max(
                 triangle[i][j] + cost[i + 1][j], triangle[i][j] + cost[i + 1][j + 1]
             )
-    answer = max(cost[1][0], cost[1][1]) + triangle[0][0]
-else:
-    answer = max(cost[1][0], cost[1][1]) + triangle[0][0] if N == 2 else triangle[0][0]
+
+answer = max(cost[1][0], cost[1][1]) + triangle[0][0] if N >= 2 else triangle[0][0]
 
 print(answer)
