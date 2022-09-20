@@ -1,5 +1,3 @@
-conv = {'C#': '1', 'D#': '2', 'F#': '3', 'G#': '4', 'A#': '5', 'E#': '6', 'B#':'7'}
-
 def get_runtime(start, end):
     h1, m1 = start.split(':')
     h2, m2 = end.split(':')
@@ -24,20 +22,7 @@ def get_runtime_melody(runtime, melody):
         return total
 
 def trans(m):
-    if len(m) == 1 or '#' not in m:
-        return m
-    
-    res, i = "", 0
-    while i < len(m) - 1:
-        if m[i + 1] == '#':
-            res += conv[m[i]+m[i+1]]
-            i += 2
-        else:
-            res += m[i]
-            i += 1
-            
-    if m[-1] != '#':
-        res += m[-1]
+    res = m.replace('C#','c').replace('D#','d').replace('F#','f').replace('G#','g').replace('A#','a')
         
     return res
     
